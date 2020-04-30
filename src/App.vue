@@ -1,28 +1,41 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div>
+    <header class="navbar container">
+      <a class="navbar-brand">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/9/95/Vue.js_Logo_2.svg"
+             width="30px"
+             height="30px" />
+        Vuex-test
+      </a>
+      <button type="button"
+              class="btn btn-success"
+              v-if="$store.getters.isUserAuth"
+              @click="$store.commit('logOut')">
+              Выйти
+      </button>
+    </header>
+    <main class="container">
+      <loginForm v-if="!$store.getters.isUserAuth" />
+      <h2 v-else>Аккаунт пользователя</h2>
+    </main>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
+import loginForm from './pages/login';
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    loginForm
+  },
+  mounted () {
+    if (sessionStorage.getItem('access_token')) {
+      this.$store.commit('getDataFromSessionStorage');
+    }
   }
 }
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
+
 </style>
